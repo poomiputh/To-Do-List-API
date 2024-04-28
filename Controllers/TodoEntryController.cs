@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using To_Do_List_API.Models;
 
 namespace To_Do_List_API.Controllers
 {
@@ -7,8 +8,17 @@ namespace To_Do_List_API.Controllers
     [Route("[controller]")]
     public class TodoEntryController : ControllerBase
     {
+        private readonly ILogger<TodoEntryController> _logger;
+        private readonly WebApiDemoContext _context;
+
         private static List<TodoEntry> _todoEntries = new List<TodoEntry>();
         
+        public TodoEntryController(ILogger<TodoEntryController> logger, WebApiDemoContext context)
+        {
+            _logger = logger;
+            _context = context;
+        }
+
         [HttpGet]
         public ActionResult Get()
         {
