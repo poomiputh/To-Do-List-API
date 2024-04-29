@@ -1,4 +1,6 @@
-﻿namespace To_Do_List_API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace To_Do_List_API.Models
 {
     public class User
     {

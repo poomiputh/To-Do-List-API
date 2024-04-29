@@ -10,7 +10,6 @@ namespace To_Do_List_API.Models
         [StringLength(100, MinimumLength = 1)]
         [RegularExpression("^\\w+$", MatchTimeoutInMilliseconds = 1000)]
         public string Name { get; set; } = string.Empty;
-
-        public List<TodoEntry> TagEntries { get; set; } = [];
+        public List<TodoEntry> TagEntries { get; } = [];
     }
 }

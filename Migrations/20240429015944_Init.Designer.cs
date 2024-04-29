@@ -12,8 +12,8 @@ using To_Do_List_API.Models;
 namespace To_Do_List_API.Migrations
 {
     [DbContext(typeof(WebApiDemoContext))]
-    [Migration("20240429074300_AddTodoTag")]
-    partial class AddTodoTag
+    [Migration("20240429015944_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,23 +25,7 @@ namespace To_Do_List_API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("To_Do_List_API.Models.TodoTag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TodoTag", (string)null);
-                });
-
-            modelBuilder.Entity("To_Do_List_API.TodoEntry", b =>
+            modelBuilder.Entity("To_Do_List_API.Models.TodoEntry", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,9 +47,59 @@ namespace To_Do_List_API.Migrations
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.ToTable("TodoEntry", (string)null);
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TodoItem");
+                });
+
+            modelBuilder.Entity("To_Do_List_API.Models.TodoTag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TodoTag");
+                });
+
+            modelBuilder.Entity("To_Do_List_API.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("TodoEntryTodoTag", b =>
@@ -83,9 +117,20 @@ namespace To_Do_List_API.Migrations
                     b.ToTable("TodoEntryTodoTag");
                 });
 
+            modelBuilder.Entity("To_Do_List_API.Models.TodoEntry", b =>
+                {
+                    b.HasOne("To_Do_List_API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("TodoEntryTodoTag", b =>
                 {
-                    b.HasOne("To_Do_List_API.TodoEntry", null)
+                    b.HasOne("To_Do_List_API.Models.TodoEntry", null)
                         .WithMany()
                         .HasForeignKey("TagEntriesId")
                         .OnDelete(DeleteBehavior.Cascade)

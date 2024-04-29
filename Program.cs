@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using To_Do_List_API.Models;
+using To_Do_List_API.Services;
 
 namespace To_Do_List_API
 {
@@ -14,6 +15,8 @@ namespace To_Do_List_API
 
             builder.Services.AddControllers();
             builder.Services.AddDbContext<WebApiDemoContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddAuthentication();
+            builder.Services.AddScoped<TodoService>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

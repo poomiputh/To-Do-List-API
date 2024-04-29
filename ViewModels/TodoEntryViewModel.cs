@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace To_Do_List_API
+namespace To_Do_List_API.ViewModels
 {
     public class TodoEntryViewModel
     {

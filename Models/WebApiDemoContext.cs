@@ -9,19 +9,20 @@ namespace To_Do_List_API.Models
             
         }
 
-        public DbSet<TodoEntry> ToDoItem { get; set; }     
-        public DbSet<TodoTag> ToDoTag { get; set; }
-
-        public DbSet<User> User { get; set; }
+        public DbSet<TodoEntry> TodoEntries { get; set; }     
+        public DbSet<TodoTag> TodoTags { get; set; }
+        public DbSet<User> Users { get; set; }
 
         override protected void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TodoEntry>().ToTable("TodoEntry")
-                .HasMany(t => t.Tags)
-                .WithMany(t => t.TagEntries);
+            modelBuilder.Entity<TodoEntry>()
+                .HasOne(u => u.User)
+                .WithMany()
+                .HasForeignKey(u => u.UserId);
 
-            modelBuilder.Entity<TodoTag>().ToTable("TodoTag");
-           
+            modelBuilder.Entity<TodoEntry>()
+                .HasMany(t => t.Tags)
+                .WithMany(t => t.TagEntries);   
         }
     }
 }
