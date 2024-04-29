@@ -1,9 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using To_Do_List_API.Models;
 
 namespace To_Do_List_API
 {
@@ -15,6 +10,8 @@ namespace To_Do_List_API
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public DateTime? DueDate { get; set; }
+
+        public List<TodoTag>? Tags { get; set; }
 
         public TodoEntry(string title, string? description = null, DateTime? dueDate = null)
         {
