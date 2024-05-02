@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using To_Do_List_API.Models;
 using To_Do_List_API.Services;
 
+
 namespace To_Do_List_API
 {
     public class Program
@@ -12,11 +13,10 @@ namespace To_Do_List_API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
-            builder.Services.AddDbContext<WebApiDemoContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            builder.Services.AddAuthentication();
+            builder.Services.AddDbContext<TodoDbContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddScoped<TodoService>();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -30,10 +30,12 @@ namespace To_Do_List_API
                 app.UseSwaggerUI();
             }
 
+            app.UseCors(options =>
+            {
+                options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            });
+
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
 
             app.MapControllers();
 

@@ -10,10 +10,10 @@ namespace To_Do_List_API.Controllers
     public class TodoEntryController : ControllerBase
     {
         private readonly ILogger<TodoEntryController> _logger;
-        private readonly WebApiDemoContext _context;
+        private readonly TodoDbContext _context;
         private readonly TodoService _todoService;
 
-        public TodoEntryController(ILogger<TodoEntryController> logger, WebApiDemoContext context, TodoService todoService)
+        public TodoEntryController(ILogger<TodoEntryController> logger, TodoDbContext context, TodoService todoService)
         {
             _logger = logger;
             _context = context;
@@ -27,52 +27,53 @@ namespace To_Do_List_API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult Get([FromRoute] Guid id)
+        public async Task<ActionResult> Get([FromRoute] Guid id)
         {
-            var entry = _context.TodoEntries.FirstOrDefault(e => e.Id == id);
-            if (entry == null)
-            {
-                return NotFound();
-            }
-            return Ok(entry);
+            return Ok(await _todoService.GetById(id));
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] TodoEntryViewModel entry)
+        public async Task<ActionResult> Post([FromBody] TodoEntryViewModel entry)
         {
-            TodoEntry newEntry = new TodoEntry(entry.Title, entry.Description, entry.DueDate);
-            _context.TodoEntries.Add(newEntry);
-            _context.SaveChanges();
-            return Created("", newEntry);
+            bool status = await _todoService.AddTodo(new TodoEntry(entry.Title, entry.Description, entry.DueDate));
+            if (status)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete([FromRoute] Guid id)
+        public async Task<ActionResult> Delete([FromRoute] Guid id)
         {
-            var entry = _context.TodoEntries.FirstOrDefault(e => e.Id == id);
-            if (entry == null)
+            bool status = await _todoService.RemoveTodo(id);
+            if (status)
             {
-                return NotFound();
+                return Ok();
             }
-            _context.TodoEntries.Remove(entry);
-            _context.SaveChanges();
-            return Ok();
+            else
+            {
+                return BadRequest();
+            }
         }
 
-        [HttpPut("{id}")]
-        public ActionResult Put([FromRoute] Guid id, [FromBody] TodoEntryViewModel entry)
-        {
-            var existingEntry = _context.TodoEntries.FirstOrDefault(e => e.Id == id);
-            if (existingEntry == null)
-            {
-                return NotFound();
-            }
-            existingEntry.Title = entry.Title;
-            existingEntry.Description = entry.Description;
-            existingEntry.DueDate = entry.DueDate;
-            existingEntry.UpdateDate = DateTime.Now;
-            _context.SaveChanges();
-            return Ok(existingEntry);
-        }
+        //[HttpPut("{id}")]
+        //public ActionResult Put([FromRoute] Guid id, [FromBody] TodoEntryViewModel entry)
+        //{
+        //    var existingEntry = _context.TodoEntries.FirstOrDefault(e => e.Id == id);
+        //    if (existingEntry == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    existingEntry.Title = entry.Title;
+        //    existingEntry.Description = entry.Description;
+        //    existingEntry.DueDate = entry.DueDate;
+        //    existingEntry.UpdateDate = DateTime.Now;
+        //    _context.SaveChanges();
+        //    return Ok(existingEntry);
+        //}
     }
 }

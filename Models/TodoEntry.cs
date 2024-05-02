@@ -11,8 +11,8 @@ namespace To_Do_List_API.Models
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public DateTime? DueDate { get; set; }
-        public Guid? UserId { get; set; }
-        public User User { get; } = null!;
+        //public Guid? UserId { get; set; }
+        //public User User { get; } = null!;
         public List<TodoTag> Tags { get; } = [];
 
         public TodoEntry(string title, string? description = null, DateTime? dueDate = null)

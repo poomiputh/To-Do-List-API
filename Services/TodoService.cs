@@ -7,9 +7,9 @@ namespace To_Do_List_API.Services
     public class TodoService
     {
         private readonly ILogger<TodoService> _logger;
-        private readonly WebApiDemoContext _context;
+        private readonly TodoDbContext _context;
 
-        public TodoService(ILogger<TodoService> logger, WebApiDemoContext context)
+        public TodoService(ILogger<TodoService> logger, TodoDbContext context)
         {
             _logger = logger;
             _context = context;
@@ -43,6 +43,7 @@ namespace To_Do_List_API.Services
             else
             {
                 _context.TodoEntries.Remove(todo);
+                await _context.SaveChangesAsync();
                 return true;
             }
         }

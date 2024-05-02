@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using To_Do_List_API.Models;
 
@@ -11,12 +10,10 @@ using To_Do_List_API.Models;
 
 namespace To_Do_List_API.Migrations
 {
-    [DbContext(typeof(WebApiDemoContext))]
-    [Migration("20240429015944_Init")]
-    partial class Init
+    [DbContext(typeof(TodoDbContext))]
+    partial class TodoDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,14 +44,9 @@ namespace To_Do_List_API.Migrations
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TodoItem");
+                    b.ToTable("TodoEntries");
                 });
 
             modelBuilder.Entity("To_Do_List_API.Models.TodoTag", b =>
@@ -70,36 +62,7 @@ namespace To_Do_List_API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TodoTag");
-                });
-
-            modelBuilder.Entity("To_Do_List_API.Models.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("User");
+                    b.ToTable("TodoTags");
                 });
 
             modelBuilder.Entity("TodoEntryTodoTag", b =>
@@ -115,17 +78,6 @@ namespace To_Do_List_API.Migrations
                     b.HasIndex("TagsId");
 
                     b.ToTable("TodoEntryTodoTag");
-                });
-
-            modelBuilder.Entity("To_Do_List_API.Models.TodoEntry", b =>
-                {
-                    b.HasOne("To_Do_List_API.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TodoEntryTodoTag", b =>

@@ -11,9 +11,9 @@ using To_Do_List_API.Models;
 
 namespace To_Do_List_API.Migrations
 {
-    [DbContext(typeof(WebApiDemoContext))]
-    [Migration("20240429025459_ChangeUserField")]
-    partial class ChangeUserField
+    [DbContext(typeof(TodoDbContext))]
+    [Migration("20240502154905_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,12 +47,7 @@ namespace To_Do_List_API.Migrations
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("TodoEntries");
                 });
@@ -73,35 +68,6 @@ namespace To_Do_List_API.Migrations
                     b.ToTable("TodoTags");
                 });
 
-            modelBuilder.Entity("To_Do_List_API.Models.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("TodoEntryTodoTag", b =>
                 {
                     b.Property<Guid>("TagEntriesId")
@@ -115,15 +81,6 @@ namespace To_Do_List_API.Migrations
                     b.HasIndex("TagsId");
 
                     b.ToTable("TodoEntryTodoTag");
-                });
-
-            modelBuilder.Entity("To_Do_List_API.Models.TodoEntry", b =>
-                {
-                    b.HasOne("To_Do_List_API.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TodoEntryTodoTag", b =>

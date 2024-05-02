@@ -11,5 +11,11 @@ namespace To_Do_List_API.Models
         [RegularExpression("^\\w+$", MatchTimeoutInMilliseconds = 1000)]
         public string Name { get; set; } = string.Empty;
         public List<TodoEntry> TagEntries { get; } = [];
+
+        public TodoTag(string name)
+        {
+            Id = Guid.NewGuid();
+            Name = name;
+        }
     }
 }
