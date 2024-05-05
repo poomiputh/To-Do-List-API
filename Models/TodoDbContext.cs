@@ -11,7 +11,6 @@ namespace To_Do_List_API.Models
 
         public DbSet<TodoEntry> TodoEntries { get; set; }     
         public DbSet<TodoTag> TodoTags { get; set; }
-        //public DbSet<User> Users { get; set; }
 
         override protected void OnModelCreating(ModelBuilder modelBuilder)
         {

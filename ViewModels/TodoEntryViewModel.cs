@@ -1,17 +1,18 @@
-﻿using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using To_Do_List_API.Models;
 
 namespace To_Do_List_API.ViewModels
 {
     public class TodoEntryViewModel
     {
-        public string Title { get; set; } = string.Empty;
+        public string Title { get; set; }
         public string? Description { get; set; }
         public DateTime? DueDate { get; set; }
- 
+        public List<TodoTag> Tags { get; set;}
+
+        public TodoEntryViewModel()
+        {
+            Title = string.Empty;
+            Tags = [];
+        }
     }
 }

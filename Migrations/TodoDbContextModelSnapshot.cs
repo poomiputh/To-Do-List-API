@@ -37,6 +37,9 @@ namespace To_Do_List_API.Migrations
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDone")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -57,8 +60,7 @@ namespace To_Do_List_API.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

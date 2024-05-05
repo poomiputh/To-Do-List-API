@@ -28,12 +28,27 @@ namespace To_Do_List_API.Services
         public async Task<bool> AddTodo(TodoEntry entry)
         {
             if (entry == null) { return false; }
-            else
+
+            var tags = new List<TodoTag>();
+            foreach (var tag in entry.Tags)
             {
-                await _context.TodoEntries.AddAsync(entry);
-                await _context.SaveChangesAsync();
-                return true;
+                var existingTag = await _context.TodoTags.FirstOrDefaultAsync(t => t.Name == tag.Name);
+                if (existingTag != null)
+                {
+                    tags.Add(existingTag);
+                }
+                else
+                {
+                    var newTag = new TodoTag { Name = tag.Name };
+                    await _context.TodoTags.AddAsync(newTag);
+                    tags.Add(newTag);
+                }
             }
+
+            entry.Tags = tags;
+            await _context.TodoEntries.AddAsync(entry);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> RemoveTodo(Guid id)
@@ -51,7 +66,7 @@ namespace To_Do_List_API.Services
         public async Task<bool> UpdateTodo(TodoEntryViewModel entry)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
-            TodoEntry todoEntry = new TodoEntry(entry.Title, entry.Description, entry.DueDate);
+            TodoEntry todoEntry = new TodoEntry(entry.Title, entry.Tags, entry.Description, entry.DueDate);
 
             //if (entry.Tags.Length > 0)
             //{
@@ -72,6 +87,17 @@ namespace To_Do_List_API.Services
                 _logger.LogError("Update Todo Failed, Message: {error}", ex);
                 return false;
             }
+        }
+
+        public async Task<List<TodoEntry>> GetByDateTime(DateTime startDateTime, DateTime endDateTime)
+        {
+            _logger.LogInformation("Searching for Todo Entries between {startDateTime} and {endDateTime}", startDateTime, endDateTime);
+            var results = await _context.TodoEntries
+            .Include(todo => todo.Tags)
+            .Where(todo => todo.DueDate >= startDateTime && todo.DueDate <= endDateTime)
+            .OrderBy(todo => todo.DueDate)
+            .ToListAsync();
+            return results;
         }
     }
 }

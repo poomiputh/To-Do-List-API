@@ -32,10 +32,17 @@ namespace To_Do_List_API.Controllers
             return Ok(await _todoService.GetById(id));
         }
 
+        [HttpGet("searchDateTime")]
+        public async Task<ActionResult> Get([FromQuery] DateTime startDateTime, [FromQuery] DateTime endDateTime)
+        {
+            return Ok(await _todoService.GetByDateTime(startDateTime, endDateTime));
+        }
+
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] TodoEntryViewModel entry)
         {
-            bool status = await _todoService.AddTodo(new TodoEntry(entry.Title, entry.Description, entry.DueDate));
+            _logger.LogDebug(entry.Title);
+            bool status = await _todoService.AddTodo(new TodoEntry(entry.Title, entry.Tags, entry.Description, entry.DueDate));
             if (status)
             {
                 return Ok();

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace To_Do_List_API.Models
 {
@@ -6,16 +7,22 @@ namespace To_Do_List_API.Models
     {
         [Key]
         public Guid Id { get; set; }
-        [Required]
-        [StringLength(100, MinimumLength = 1)]
-        [RegularExpression("^\\w+$", MatchTimeoutInMilliseconds = 1000)]
-        public string Name { get; set; } = string.Empty;
-        public List<TodoEntry> TagEntries { get; } = [];
+        public string Name { get; set; }
+        [JsonIgnore]
+        public List<TodoEntry> TagEntries { get; set; }
+
+        public TodoTag()
+        {
+            Id = Guid.NewGuid();
+            Name = string.Empty;
+            TagEntries = [];
+        }
 
         public TodoTag(string name)
         {
             Id = Guid.NewGuid();
             Name = name;
+            TagEntries = [];
         }
     }
 }

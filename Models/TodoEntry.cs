@@ -11,11 +11,18 @@ namespace To_Do_List_API.Models
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public DateTime? DueDate { get; set; }
-        //public Guid? UserId { get; set; }
-        //public User User { get; } = null!;
-        public List<TodoTag> Tags { get; } = [];
+        public bool IsDone { get; set; }
+        public List<TodoTag> Tags { get; set; }
 
-        public TodoEntry(string title, string? description = null, DateTime? dueDate = null)
+        public TodoEntry() {
+            Id = Guid.NewGuid();
+            Title = string.Empty;
+            CreateDate = DateTime.Now;
+            UpdateDate = CreateDate;
+            IsDone = false;
+            Tags = [];
+        }
+        public TodoEntry(string title, List<TodoTag> tags, string? description = null, DateTime? dueDate = null)
         {   
             Id = Guid.NewGuid();
             Title = title;
@@ -23,6 +30,8 @@ namespace To_Do_List_API.Models
             CreateDate = DateTime.Now;
             UpdateDate = CreateDate;
             DueDate = dueDate;
+            IsDone = false;
+            Tags = tags;
         }
 
         public TodoEntry(TodoEntry entry)
@@ -33,6 +42,8 @@ namespace To_Do_List_API.Models
             CreateDate = entry.CreateDate;
             UpdateDate = entry.UpdateDate;
             DueDate = entry.DueDate;
+            IsDone = entry.IsDone;
+            Tags = entry.Tags;
         }
     }
 }

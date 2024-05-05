@@ -20,7 +20,8 @@ namespace To_Do_List_API.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDone = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,7 +33,7 @@ namespace To_Do_List_API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

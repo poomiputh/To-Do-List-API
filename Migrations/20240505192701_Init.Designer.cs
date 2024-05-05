@@ -12,7 +12,7 @@ using To_Do_List_API.Models;
 namespace To_Do_List_API.Migrations
 {
     [DbContext(typeof(TodoDbContext))]
-    [Migration("20240502154905_Init")]
+    [Migration("20240505192701_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -40,6 +40,9 @@ namespace To_Do_List_API.Migrations
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDone")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -60,8 +63,7 @@ namespace To_Do_List_API.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
