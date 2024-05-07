@@ -67,20 +67,18 @@ namespace To_Do_List_API.Controllers
             }
         }
 
-        //[HttpPut("{id}")]
-        //public ActionResult Put([FromRoute] Guid id, [FromBody] TodoEntryViewModel entry)
-        //{
-        //    var existingEntry = _context.TodoEntries.FirstOrDefault(e => e.Id == id);
-        //    if (existingEntry == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    existingEntry.Title = entry.Title;
-        //    existingEntry.Description = entry.Description;
-        //    existingEntry.DueDate = entry.DueDate;
-        //    existingEntry.UpdateDate = DateTime.Now;
-        //    _context.SaveChanges();
-        //    return Ok(existingEntry);
-        //}
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put([FromRoute] Guid id, [FromBody] TodoEntryViewModel entry)
+        {
+           bool status = await _todoService.UpdateTodo(id, entry);
+           if (status)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
     }
 }

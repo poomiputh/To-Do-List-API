@@ -63,23 +63,36 @@ namespace To_Do_List_API.Services
             }
         }
 
-        public async Task<bool> UpdateTodo(TodoEntryViewModel entry)
+        public async Task<bool> UpdateTodo(Guid id, TodoEntryViewModel entry)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
-            TodoEntry todoEntry = new TodoEntry(entry.Title, entry.Tags, entry.Description, entry.DueDate);
+            TodoEntry? existingTodo = await GetById(id);
+            if (existingTodo == null)
+            {
+                return false;
+            }
 
-            //if (entry.Tags.Length > 0)
-            //{
-            //    var listOfTags = entry.Tags.Select(tag => new TodoTags { Name = tag });
-            //    todoEntry.Tags.AddRange(listOfTags);
-            //}
+            existingTodo.Title = entry.Title;
+            existingTodo.Description = entry.Description;
+            existingTodo.DueDate = entry.DueDate;
+            if (entry.Tags.Count > 0)
+            {
+                foreach (var tag in entry.Tags)
+                {
+                    var existingTag = await _context.TodoTags.FirstOrDefaultAsync(t => t.Name == tag.Name);
+                    if (existingTag == null)
+                    {
+                        await _context.TodoTags.AddAsync(tag);
+                        existingTodo.Tags.Add(tag);
+                    }
+                }
+            }
 
             try
             {
-                await _context.TodoEntries.AddAsync(todoEntry);
+                _context.Update(existingTodo);
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
-
                 return true;
             }
             catch (Exception ex)
