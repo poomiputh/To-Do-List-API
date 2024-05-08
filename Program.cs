@@ -21,6 +21,8 @@ namespace To_Do_List_API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.WebHost.UseUrls("http://0.0.0.0:5163");
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -32,7 +34,9 @@ namespace To_Do_List_API
 
             app.UseCors(options =>
             {
-                options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                options.AllowAnyOrigin()
+                       .AllowAnyHeader()
+                       .AllowAnyMethod();
             });
 
             app.UseHttpsRedirection();
