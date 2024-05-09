@@ -75,6 +75,8 @@ namespace To_Do_List_API.Services
             existingTodo.Title = entry.Title;
             existingTodo.Description = entry.Description;
             existingTodo.DueDate = entry.DueDate;
+            existingTodo.IsDone = entry.IsDone;
+
             if (entry.Tags.Count > 0)
             {
                 foreach (var tag in entry.Tags)
