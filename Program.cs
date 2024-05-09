@@ -21,7 +21,8 @@ namespace To_Do_List_API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.WebHost.UseUrls("http://0.0.0.0:5163");
+            // Only for local network
+            // builder.WebHost.UseUrls("http://0.0.0.0:5163");
 
             var app = builder.Build();
 
