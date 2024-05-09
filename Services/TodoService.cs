@@ -114,5 +114,16 @@ namespace To_Do_List_API.Services
             .ToListAsync();
             return results;
         }
+
+        public async Task<List<TodoEntry>> GetByTag(string tagName)
+        {
+            _logger.LogInformation("Searching for Todo Entries with Tag: {tagName}", tagName);
+            var results = await _context.TodoEntries
+            .Include(todo => todo.Tags)
+            .Where(todo => todo.Tags.Any(tag => tag.Name.ToLower() == tagName.ToLower()))
+            .OrderBy(todo => todo.DueDate)
+            .ToListAsync();
+            return results;
+        }
     }
 }

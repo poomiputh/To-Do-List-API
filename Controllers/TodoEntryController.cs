@@ -80,5 +80,12 @@ namespace To_Do_List_API.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet("search/{tag}")]
+        public async Task<ActionResult> GetByTag([FromRoute] string tag)
+        {
+            return Ok(await _todoService.GetByTag(tag));
+        }
+
     }
 }
